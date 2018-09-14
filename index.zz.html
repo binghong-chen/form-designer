@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>表单设计器</title>
+    <link rel="stylesheet" href="css/magic-check.css" type="text/css">
+    <link rel="stylesheet" href="css/main.css" type="text/css">
+    <link rel="stylesheet" href="css/phone.css" type="text/css">
+    <link rel="stylesheet" href="assets/font/iconfont.css" type="text/css">
+</head>
+
+<body>
+    <script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+    <script type="text/javascript" src="js/common.js"></script>
+    <script type="text/javascript" src="js/template.1.js"></script>
+    <script type="text/javascript" src="js/drag.js"></script>
+    <script type="text/javascript" src="js/sort.js"></script>
+    <div id="container">
+        <div id="head" class="fixed-panel">
+            <div class="left"></div>
+            <div class="middle">
+                <div id="toolbar">
+                    <div id="toolbar-control">
+                        <div class="toolbar-item">
+                            <div class="toolbar-icon">
+                                <i class="iconfont icon-kongjian"></i>
+                            </div>
+                            <div class="toolbar-name">
+                                字段
+                            </div>
+                        </div>
+                        <div class="toolbar-control-panel-container">
+                            <div id="toolbar-control-panel" class="float-panel">
+                                <div :id="item.elId" class="toolbar-control-item" r-for="item in unUsedFields()" @click="click(item)">
+                                    <div class="toolbar-icon">
+                                        <i :class="['icon', 'iconfont', item.icon]"></i>
+                                    </div>
+                                    <div class="toolbar-name">
+                                        {{item.title}}
+                                    </div>
+                                </div>
+                                <div class="panel-bottom-link">
+                                    <a r-if="isTable" @click="back">返回上级</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="right">
+                <div id="buttons">
+                    <button id="btnPreview" class="blue">预览</button>
+                    <button id="btnSave" class="blue">保存</button>
+                    <button id="btnPublish" class="blue">发布</button>
+                    <button id="btnExit" class="gray">退出</button>
+                </div>
+            </div>
+        </div>
+        <div id="work" @click="workClick($event)">
+            <div id="phone">
+                <div id="phone_content" r-if="fields.length">
+                    <div :id="'control' + field.id " r-for="field in fields" @click="click(field)" @contextmenu="contextmenu($event, field)"
+                        :class="['control', {selected: field === selectedField, draggable: field.draggable, sortable:field.sortable}]" :type="field.type" :title="title(field)">
+                        <div class="control-title">{{field.title}}
+                            <span r-show="field.type !='table' && field.allowNull === false" style="margin-left: 4px; color:red;">*</span>
+                        </div>
+                        <div class="control-element">
+                            <input r-if="field.type=='stext'" type="text" :class="field.type" r-model="field.defaultValue" readonly="true" />
+                            <input r-else-if="field.type=='ltext'" type="text" :class="field.type" r-model="field.defaultValue" readonly="true" />
+                            <input r-else-if="field.type=='numberbox'" type="text" :class="field.type" r-model="field.defaultValue" readonly="true" />
+                            <div r-else-if="field.type=='radio'" :class="field.type">
+                                <div r-for="option in field.options">
+                                    <input :id="field.fieldName + '-' + option.value" r-model="option.value" :name="field.fieldName" type="radio" disabled="disabled"
+                                    />
+                                    <label :for="field.fieldName + '-' + option.value">{{option.text}}</label>
+                                </div>
+                            </div>
+                            <div r-else-if="field.type=='checkbox'" :class="field.type">
+                                <div r-for="option in field.options">
+                                    <input :id="field.fieldName + '-' + option.value" r-model="option.value" type="checkbox" disabled="disabled" />
+                                    <label :for="field.fieldName + '-' + option.value">{{option.text}}</label>
+                                </div>
+                            </div>
+                            <textarea r-else-if="field.type=='mtext'" :class="field.type" r-model="field.defaultValue" readonly="true"></textarea>
+                            <select r-else-if="field.type=='droplist'" :class="field.type" readonly="true">
+                                <option r-for="option in field.options" r-model="option.value">
+                                    {{option.text}}
+                                </option>
+                            </select>
+                            <div r-else-if="field.type=='datepicker'">
+                                <input type="text" class="datepicker" :disabled="field.currentTime" :value="value(field)" readonly="true" />
+                            </div>
+                            <div r-else-if="field.type=='image-selector'">
+                                <i class="iconfont image-selector-icon icon-tianjia1-copy" style="font-size: 40px;"></i>
+                                <input type="file" accept="image/*" style="display:none;" />
+                            </div>
+                            <div r-else-if="field.type=='table'">
+                                <div class="fold" :title="field.isUnFold ? '点击展开' : '点击折叠'" @click="field.isUnFold=!field.isUnFold">{{ field.isUnFold ? '+' : '-' }}</div>
+                                <div r-show="!field.isUnFold" :id="'table' + field.id" class="control-table">
+                                    <div :id="'control' + subField.id " r-for="subField in field.fields" @click="click(subField)" @contextmenu="contextmenu($event, subField)"
+                                        :class="['control', {selected: subField === selectedField,draggable: field.draggable, sortable:field.sortable}]" :type="subField.type"
+                                        :title="title(subField)">
+                                        <div class="control-title">
+                                            {{subField.title}}
+                                            <span r-show="subField.type !='table' && subField.allowNull === false" style="margin-left: 4px; color:red;">*</span>
+                                        </div>
+                                        <div class="control-element">
+                                            <input r-if="subField.type=='stext'" type="text" :class="subField.type" r-model="subField.defaultValue" readonly="true" />
+                                            <input r-else-if="subField.type=='ltext'" type="text" :class="subField.type" r-model="subField.defaultValue" readonly="true"
+                                            />
+                                            <input r-else-if="subField.type=='numberbox'" type="text" :class="subField.type" r-model="subField.defaultValue" readonly="true"
+                                            />
+                                            <div r-else-if="subField.type=='radio'" :class="subField.type">
+                                                <div r-for="option in subField.options">
+                                                    <input :id="subField.fieldName + '-' + option.value" r-model="option.value" :name="subField.fieldName" type="radio" disabled="disabled"
+                                                    />
+                                                    <label :for="subField.fieldName + '-' + option.value">{{option.text}}</label>
+                                                </div>
+                                            </div>
+                                            <div r-else-if="subField.type=='checkbox'" :class="subField.type">
+                                                <div r-for="option in subField.options">
+                                                    <input :id="subField.fieldName + '-' + option.value" r-model="option.value" type="checkbox" disabled="disabled" />
+                                                    <label :for="subField.fieldName + '-' + option.value">{{option.text}}</label>
+                                                </div>
+                                            </div>
+                                            <textarea r-else-if="subField.type=='mtext'" :class="subField.type" readonly="true"></textarea>
+                                            <select r-else-if="subField.type=='droplist'" :class="subField.type" readonly="true">
+                                                <option r-for="option in options" r-model="option.value">
+                                                    {{option.text}}
+                                                </option>
+                                            </select>
+                                            <div r-else-if="subField.type=='datepicker'">
+                                                <input type="text" class="datepicker" :disabled="subField.currentTime" :value="value(subField)" readonly="true" />
+                                            </div>
+                                            <div r-else-if="subField.type=='image-selector'">
+                                                <i class="iconfont image-selector-icon icon-tianjia1-copy" style="font-size: 40px;"></i>
+                                                <input type="file" accept="image/*" style="display:none;" />
+                                            </div>
+                                            <div r-else-if="subField.type=='table'">
+                                                <div :id="'table' + subField.id" class="control-table">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <script type="text/javascript" src="js/phone.js"></script>
+            </div>
+            <div r-show="selectedField !== undefined" id="settings" class="float-panel">
+                <div id="settings_head" class="draggable" onclick="">属性</div>
+                <div r-if="selectedField !== undefined" id="settings_content">
+                    <div class="setting-item">
+                        <div class="setting-title">标题</div>
+                        <div class="setting-value">
+                            <input type="text" r-model="selectedField.title" />
+                        </div>
+                    </div>
+                    <div class="setting-item">
+                        <div class="setting-title">类型</div>
+                        <div class="setting-value">
+                            <div>{{selectedField.typeName}}</div>
+                        </div>
+                    </div>
+                    <div class="setting-item">
+                        <div class="setting-title">字段名</div>
+                        <div class="setting-value">
+                            <div>{{selectedField.fieldName}}</div>
+                        </div>
+                    </div>
+                    <div class="setting-item">
+                        <div class="setting-title">
+                            子表字段
+                        </div>
+                        <div class="setting-value">
+                            <input id="chkSubTableField" type="checkbox" r-model="selectedField.isSubTableField" disabled="disabled" class="magic-checkbox"
+                            />
+                            <label for="chkSubTableField">
+                                子表字段</label>
+                        </div>
+                    </div>
+                    <div r-show="selectedField.allowNull !== undefined" class="setting-item">
+                        <div class="setting-title">
+                            允许为空
+                        </div>
+                        <div class="setting-value">
+                            <input id="chkAllowNull" type="checkbox" r-model="selectedField.allowNull" class="magic-checkbox" />
+                            <label for="chkAllowNull">
+                                允许为空</label>
+                        </div>
+                    </div>
+                    <div r-show="selectedField.defaultValue !== undefined" class="setting-item">
+                        <div class="setting-title">默认值</div>
+                        <div class="setting-value">
+                            <input type="text" r-model="selectedField.defaultValue" />
+                        </div>
+                    </div>
+                    <div r-show="selectedField.correspondingProperty !== undefined" class="setting-item">
+                        <div class="setting-title">对应属性</div>
+                        <div class="setting-value">
+                            <input type="text" r-model="selectedField.correspondingProperty" style="width: 241px;" />
+                            <button>...</button>
+                        </div>
+                    </div>
+                    <div r-show="selectedField.containHour !== undefined" class="setting-item">
+                        <div class="setting-title">包含时刻</div>
+                        <div class="setting-value">
+                            <input id="chkContainHour" type="checkbox" r-model="selectedField.containHour" class="magic-checkbox" />
+                            <label for="chkContainHour">
+                                包含时刻</label>
+                        </div>
+                    </div>
+                    <div r-show="selectedField.currentTime !== undefined" class="setting-item">
+                        <div class="setting-title">当前时间</div>
+                        <div class="setting-value">
+                            <input id="chkCurrentTime" type="checkbox" r-model="selectedField.currentTime" class="magic-checkbox" />
+                            <label for="chkCurrentTime">
+                                当前时间</label>
+                        </div>
+                    </div>
+                    <div r-show="selectedField.dateCalc !== undefined" class="setting-item">
+                        <div class="setting-title">日期计算</div>
+                        <div class="setting-value">
+                            <input id="chkDateCalc" type="checkbox" r-model="selectedField.dateCalc" class="magic-checkbox" />
+                            <label for="chkDateCalc">
+                                日期计算</label>
+                        </div>
+                    </div>
+                    <div r-show="selectedField.formula !== undefined" class="setting-item">
+                        <div class="setting-title">计算公式</div>
+                        <div class="setting-value">
+                            <input type="text" r-model="selectedField.formula " style="width: 241px;" readonly="readonly" />
+                            <button>...</button>
+                        </div>
+                    </div>
+                    <div r-show="selectedField.showYear !== undefined || selectedField.showMonth !== undefined || selectedField.showDate !== undefined"
+                        class="setting-item">
+                        <div class="setting-title">日期显示设置</div>
+                        <div class="setting-value">
+                            <div class="setting-checkbox-item" r-show="selectedField.showYear !== undefined">
+                                <input id="chkShowYear" type="checkbox" r-model="selectedField.showYear" class="magic-checkbox" />
+                                <label for="chkShowYear">
+                                    显示年</label>
+                            </div>
+                            <div class="setting-checkbox-item" r-show="selectedField.showMonth !== undefined">
+                                <input id="chkShowMonth" type="checkbox" r-model="selectedField.showMonth" class="magic-checkbox" />
+                                <label for="chkShowMonth">
+                                    显示月</label>
+                            </div>
+                            <div class="setting-checkbox-item" r-show="selectedField.showDate !== undefined">
+                                <input id="chkShowDate" type="checkbox" r-model="selectedField.showDate" class="magic-checkbox" />
+                                <label for="chkShowDate">
+                                    显示天</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="setting-item">
+                        <div class="setting-title">描述</div>
+                        <div class="setting-value">
+                            <div>{{selectedField.description}}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="contextmenu" class="float-panel">
+        <div id="contextmenu_delete" class="contextmenu-item">删除</div>
+        <div id="contextmenu_up" class="contextmenu-item">上移</div>
+        <div id="contextmenu_down" class="contextmenu-item">下移</div>
+    </div>
+    <script type="text/javascript" src="js/control.js"></script>
+    <script type="text/javascript" src="js/main.js"></script>
+</body>
+
+</html>

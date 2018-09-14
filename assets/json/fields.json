@@ -1,0 +1,1089 @@
+{
+    "fields": [{
+        "id": 1,
+        "title": "姓名",
+        "controlType": 31,
+        "icon": "icon-ziyuan",
+        "fieldName": "name",
+        "isSubTableField": false,
+        "allowNull": true,
+        "defaultValue": "",
+        "corProperty": {
+            "text": "",
+            "field": "",
+            "property": ""
+        },
+        "dateCalc": false,
+        "formula": [],
+        "showYear": false,
+        "showMonth": false,
+        "showDate": false,
+        "description": "允许最大输入50个汉字或显示日期计算结果",
+        "type": "ltext",
+        "typeName": "小文本",
+        "style": {
+            "color": "#666",
+            "fontSize": "12px",
+            "fontFamily": "Microsoft YaHei",
+            "backgroundColor": "#fff"
+        },
+        "isUsed": false
+    }, {
+        "id": 2,
+        "title": "地址",
+        "controlType": 1,
+        "icon": "icon-danhangwenben",
+        "fieldName": "addr",
+        "isSubTableField": false,
+        "allowNull": true,
+        "defaultValue": "",
+        "corProperty": {
+            "text": "",
+            "field": "",
+            "property": ""
+        },
+        "dateCalc": false,
+        "formula": [],
+        "showYear": false,
+        "showMonth": false,
+        "showDate": false,
+        "description": "允许最大输入200个汉字或显示日期计算结果",
+        "type": "stext",
+        "typeName": "单行文本",
+        "style": {
+            "color": "#666",
+            "fontSize": "12px",
+            "fontFamily": "Microsoft YaHei",
+            "backgroundColor": "#fff"
+        },
+        "isUsed": false
+    }, {
+        "id": 3,
+        "title": "照片",
+        "controlType": 34,
+        "icon": "icon-tupianxuanze",
+        "fieldName": "picture",
+        "isSubTableField": false,
+        "allowNull": true,
+        "defaultValue": "",
+        "description": "上传并显示图片",
+        "type": "image-selector",
+        "typeName": "图片选择框",
+        "style": {
+            "color": "#666",
+            "fontSize": "12px",
+            "fontFamily": "Microsoft YaHei",
+            "backgroundColor": "#fff"
+        },
+        "isUsed": false
+    }, {
+        "id": 4,
+        "title": "备注",
+        "controlType": 2,
+        "icon": "icon-duohangwenben",
+        "fieldName": "remark",
+        "isSubTableField": false,
+        "allowNull": true,
+        "defaultValue": "",
+        "corProperty": {
+            "text": "",
+            "field": "",
+            "property": ""
+        },
+        "description": "允许最大输入500个汉字或显示日期计算结果",
+        "type": "mtext",
+        "typeName": "多行文本",
+        "style": {
+            "color": "#666",
+            "fontSize": "12px",
+            "fontFamily": "Microsoft YaHei",
+            "backgroundColor": "#fff"
+        },
+        "isUsed": false
+    }, {
+        "id": 5,
+        "title": "性别",
+        "controlType": 4,
+        "icon": "icon-gouxuan3",
+        "fieldName": "gender",
+        "isSubTableField": false,
+        "options": [{
+            "value": 0,
+            "text": "男"
+        }, {
+            "value": 1,
+            "text": "女"
+        }],
+        "description": "",
+        "type": "radio",
+        "typeName": "单选框",
+        "style": {
+            "color": "#666",
+            "fontSize": "12px",
+            "fontFamily": "Microsoft YaHei",
+            "backgroundColor": "#fff"
+        },
+        "isUsed": false
+    }, {
+        "id": 6,
+        "title": "信息来源",
+        "controlType": 5,
+        "icon": "icon-fuxuankuang",
+        "fieldName": "info_source",
+        "isSubTableField": false,
+        "options": [{
+            "value": 0,
+            "text": "内推"
+        }, {
+            "value": 1,
+            "text": "拉钩"
+        }, {
+            "value": 2,
+            "text": "BOSS直聘"
+        }, {
+            "value": 3,
+            "text": "智联招聘"
+        }, {
+            "value": 4,
+            "text": "其他"
+        }],
+        "description": "",
+        "type": "checkbox",
+        "typeName": "复选框",
+        "style": {
+            "color": "#666",
+            "fontSize": "12px",
+            "fontFamily": "Microsoft YaHei",
+            "backgroundColor": "#fff"
+        },
+        "isUsed": false
+    }, {
+        "id": 7,
+        "title": "学历",
+        "controlType": 3,
+        "icon": "icon-xialakuang",
+        "fieldName": "education",
+        "isSubTableField": false,
+        "options": [{
+            "value": 0,
+            "text": "高中及以下"
+        }, {
+            "value": 1,
+            "text": "专科"
+        }, {
+            "value": 2,
+            "text": "本科"
+        }, {
+            "value": 3,
+            "text": "硕士"
+        }, {
+            "value": 4,
+            "text": "博士"
+        }, {
+            "value": 5,
+            "text": "其他"
+        }],
+        "description": "",
+        "type": "droplist",
+        "typeName": "下拉选择框",
+        "style": {
+            "color": "#666",
+            "fontSize": "12px",
+            "fontFamily": "Microsoft YaHei",
+            "backgroundColor": "#fff"
+        },
+        "isUsed": false
+    }, {
+        "id": 8,
+        "title": "期望薪资",
+        "controlType": 7,
+        "icon": "icon-shuzi",
+        "fieldName": "salaryExpectation",
+        "isSubTableField": false,
+        "allowNull": true,
+        "defaultValue": "",
+        "corProperty": {
+            "text": "",
+            "field": "",
+            "property": ""
+        },
+        "formula": [],
+        "dx": false,
+        "calcTotal": false,
+        "totalDx": false,
+        "showFormat": "",
+        "description": "数字录入框",
+        "type": "numberbox",
+        "typeName": "数字框",
+        "style": {
+            "color": "#666",
+            "fontSize": "12px",
+            "fontFamily": "Microsoft YaHei",
+            "backgroundColor": "#fff"
+        },
+        "isUsed": false
+    }, {
+        "id": 9,
+        "title": "日期",
+        "controlType": 8,
+        "icon": "icon-date",
+        "fieldName": "date",
+        "isSubTableField": false,
+        "allowNull": true,
+        "defaultValue": "",
+        "corProperty": {
+            "text": "",
+            "field": "",
+            "property": ""
+        },
+        "containHour": false,
+        "currentTime": false,
+        "description": "日期选择框,如设为当前时间,则只读",
+        "type": "datepicker",
+        "typeName": "日期输入框",
+        "style": {
+            "color": "#666",
+            "fontSize": "12px",
+            "fontFamily": "Microsoft YaHei",
+            "backgroundColor": "#fff"
+        },
+        "isUsed": false
+    }, {
+        "id": 26,
+        "title": "客户",
+        "controlType": 9,
+        "icon": "icon-kehuxuanze",
+        "fieldName": "customer",
+        "isSubTableField": false,
+        "allowNull": true,
+        "defaultValue": "",
+        "description": "CRM客户选择框",
+        "type": "customer-droplist",
+        "typeName": "客户",
+        "isCorField": true,
+        "style": {
+            "color": "#666",
+            "fontSize": "12px",
+            "fontFamily": "Microsoft YaHei",
+            "backgroundColor": "#fff"
+        },
+        "properties": [{
+                "text": "单位编号",
+                "value": "danweibianhao"
+            },
+            {
+                "text": "客户经理",
+                "value": "kehujingli"
+            },
+            {
+                "text": "主分类",
+                "value": "zhufenlei"
+            },
+            {
+                "text": "电话",
+                "value": "dianhua"
+            },
+            {
+                "text": "传真",
+                "value": "chuanzhen"
+            },
+            {
+                "text": "Email",
+                "value": "email"
+            },
+            {
+                "text": "类型",
+                "value": "leixing"
+            },
+            {
+                "text": "行业",
+                "value": "hangye"
+            },
+            {
+                "text": "客户性质",
+                "value": "kehuxingzhi"
+            }
+        ],
+        "isUsed": false
+    }, {
+        "id": 27,
+        "title": "目标",
+        "controlType": 35,
+        "icon": "icon-target",
+        "fieldName": "target",
+        "isSubTableField": false,
+        "allowNull": true,
+        "defaultValue": "",
+        "corField": "",
+        "description": "CRM目标选择框",
+        "type": "target-droplist",
+        "typeName": "目标",
+        "style": {
+            "color": "#666",
+            "fontSize": "12px",
+            "fontFamily": "Microsoft YaHei",
+            "backgroundColor": "#fff"
+        },
+        "isUsed": false
+    }, {
+        "id": 28,
+        "title": "工作活动",
+        "controlType": 39,
+        "icon": "icon-huodong",
+        "fieldName": "workActivity",
+        "isSubTableField": false,
+        "allowNull": true,
+        "defaultValue": "",
+        "corField": "",
+        "description": "CRM工作活动选择框",
+        "type": "activity-droplist",
+        "typeName": "工作活动",
+        "properties": [{
+                "text": "活动类型",
+                "value": "huodongleixing"
+            },
+            {
+                "text": "工作活动编号",
+                "value": "gongzuohuodongbianhao"
+            },
+            {
+                "text": "关联管理",
+                "value": "guanlianguanli"
+            },
+            {
+                "text": "归属部门",
+                "value": "guishubumen"
+            },
+            {
+                "text": "记录形式",
+                "value": "jiluxingshi"
+            }
+        ],
+        "style": {
+            "color": "#666",
+            "fontSize": "12px",
+            "fontFamily": "Microsoft YaHei",
+            "backgroundColor": "#fff"
+        },
+        "isUsed": false
+    }, {
+        "id": 1001,
+        "title": "教育经历",
+        "controlType": 106,
+        "icon": "icon-tables-copy",
+        "fields": [{
+            "id": 10,
+            "tableId": 1001,
+            "title": "学校",
+            "controlType": 1,
+            "icon": "icon-danhangwenben",
+            "fieldName": "school",
+            "isSubTableField": true,
+            "allowNull": true,
+            "defaultValue": "",
+            "corProperty": {
+                "text": "",
+                "field": "",
+                "property": ""
+            },
+            "dateCalc": false,
+            "formula": [],
+            "showYear": false,
+            "showMonth": false,
+            "showDate": false,
+            "description": "允许最大输入200个汉字或显示日期计算结果",
+            "isUsed": false,
+            "type": "stext",
+            "typeName": "单行文本",
+            "style": {
+                "color": "#666",
+                "fontSize": "12px",
+                "fontFamily": "Microsoft YaHei",
+                "backgroundColor": "#fff"
+            }
+        }, {
+            "id": 11,
+            "tableId": 1001,
+            "title": "开始日期",
+            "controlType": 8,
+            "icon": "icon-date",
+            "fieldName": "startDate",
+            "isSubTableField": true,
+            "allowNull": true,
+            "defaultValue": "",
+            "corProperty": {
+                "text": "",
+                "field": "",
+                "property": ""
+            },
+            "containHour": false,
+            "currentTime": false,
+            "description": "日期选择框,如设为当前时间,则只读",
+            "isUsed": false,
+            "type": "datepicker",
+            "typeName": "日期输入框",
+            "style": {
+                "color": "#666",
+                "fontSize": "12px",
+                "fontFamily": "Microsoft YaHei",
+                "backgroundColor": "#fff"
+            }
+        }, {
+            "id": 12,
+            "tableId": 1001,
+            "title": "结束日期",
+            "controlType": 8,
+            "icon": "icon-date",
+            "fieldName": "endDate",
+            "isSubTableField": true,
+            "allowNull": true,
+            "defaultValue": "",
+            "corProperty": {
+                "text": "",
+                "field": "",
+                "property": ""
+            },
+            "containHour": false,
+            "currentTime": false,
+            "description": "日期选择框,如设为当前时间,则只读",
+            "isUsed": false,
+            "type": "datepicker",
+            "typeName": "日期输入框",
+            "style": {
+                "color": "#666",
+                "fontSize": "12px",
+                "fontFamily": "Microsoft YaHei",
+                "backgroundColor": "#fff"
+            }
+        }, {
+            "id": 13,
+            "tableId": 1001,
+            "title": "专业",
+            "controlType": 1,
+            "icon": "icon-danhangwenben",
+            "fieldName": "major",
+            "isSubTableField": true,
+            "allowNull": true,
+            "defaultValue": "",
+            "corProperty": {
+                "text": "",
+                "field": "",
+                "property": ""
+            },
+            "dateCalc": false,
+            "formula": [],
+            "showYear": false,
+            "showMonth": false,
+            "showDate": false,
+            "description": "允许最大输入200个汉字或显示日期计算结果",
+            "isUsed": false,
+            "type": "stext",
+            "typeName": "单行文本",
+            "style": {
+                "color": "#666",
+                "fontSize": "12px",
+                "fontFamily": "Microsoft YaHei",
+                "backgroundColor": "#fff"
+            }
+        }, {
+            "id": 14,
+            "tableId": 1001,
+            "title": "学历",
+            "controlType": 1,
+            "icon": "icon-danhangwenben",
+            "fieldName": "degree",
+            "isSubTableField": true,
+            "allowNull": true,
+            "defaultValue": "",
+            "corProperty": {
+                "text": "",
+                "field": "",
+                "property": ""
+            },
+            "dateCalc": false,
+            "formula": [],
+            "showYear": false,
+            "showMonth": false,
+            "showDate": false,
+            "description": "允许最大输入200个汉字或显示日期计算结果",
+            "isUsed": false,
+            "type": "stext",
+            "typeName": "单行文本",
+            "style": {
+                "color": "#666",
+                "fontSize": "12px",
+                "fontFamily": "Microsoft YaHei",
+                "backgroundColor": "#fff"
+            }
+        }],
+        "type": "table",
+        "typeName": "子表",
+        "style": {
+            "color": "#666",
+            "fontSize": "12px",
+            "fontFamily": "Microsoft YaHei",
+            "backgroundColor": "#fff"
+        },
+        "isUsed": false
+    }, {
+        "id": 1002,
+        "title": "工作经历",
+        "controlType": 106,
+        "icon": "icon-tables-copy",
+        "fields": [{
+            "id": 15,
+            "tableId": 1002,
+            "title": "公司",
+            "controlType": 1,
+            "icon": "icon-danhangwenben",
+            "fieldName": "company",
+            "isSubTableField": true,
+            "allowNull": true,
+            "defaultValue": "",
+            "corProperty": {
+                "text": "",
+                "field": "",
+                "property": ""
+            },
+            "dateCalc": false,
+            "formula": [],
+            "showYear": false,
+            "showMonth": false,
+            "showDate": false,
+            "description": "允许最大输入200个汉字或显示日期计算结果",
+            "isUsed": false,
+            "type": "stext",
+            "typeName": "单行文本",
+            "style": {
+                "color": "#666",
+                "fontSize": "12px",
+                "fontFamily": "Microsoft YaHei",
+                "backgroundColor": "#fff"
+            }
+        }, {
+            "id": 16,
+            "tableId": 1002,
+            "title": "开始日期",
+            "controlType": 8,
+            "icon": "icon-date",
+            "fieldName": "jobStartDate",
+            "isSubTableField": true,
+            "allowNull": true,
+            "defaultValue": "",
+            "corProperty": {
+                "text": "",
+                "field": "",
+                "property": ""
+            },
+            "containHour": false,
+            "currentTime": false,
+            "description": "日期选择框,如设为当前时间,则只读",
+            "isUsed": false,
+            "type": "datepicker",
+            "typeName": "日期输入框",
+            "style": {
+                "color": "#666",
+                "fontSize": "12px",
+                "fontFamily": "Microsoft YaHei",
+                "backgroundColor": "#fff"
+            }
+        }, {
+            "id": 17,
+            "tableId": 1002,
+            "title": "结束日期",
+            "controlType": 8,
+            "icon": "icon-date",
+            "fieldName": "jobEndDate",
+            "isSubTableField": true,
+            "allowNull": true,
+            "defaultValue": "",
+            "corProperty": {
+                "text": "",
+                "field": "",
+                "property": ""
+            },
+            "containHour": false,
+            "currentTime": false,
+            "description": "日期选择框,如设为当前时间,则只读",
+            "isUsed": false,
+            "type": "datepicker",
+            "typeName": "日期输入框",
+            "style": {
+                "color": "#666",
+                "fontSize": "12px",
+                "fontFamily": "Microsoft YaHei",
+                "backgroundColor": "#fff"
+            }
+        }, {
+            "id": 18,
+            "tableId": 1002,
+            "title": "职位",
+            "controlType": 1,
+            "icon": "icon-danhangwenben",
+            "fieldName": "position",
+            "isSubTableField": true,
+            "allowNull": true,
+            "defaultValue": "",
+            "corProperty": {
+                "text": "",
+                "field": "",
+                "property": ""
+            },
+            "dateCalc": false,
+            "formula": [],
+            "showYear": false,
+            "showMonth": false,
+            "showDate": false,
+            "description": "允许最大输入200个汉字或显示日期计算结果",
+            "isUsed": false,
+            "type": "stext",
+            "typeName": "单行文本",
+            "style": {
+                "color": "#666",
+                "fontSize": "12px",
+                "fontFamily": "Microsoft YaHei",
+                "backgroundColor": "#fff"
+            }
+        }, {
+            "id": 19,
+            "tableId": 1002,
+            "title": "工作内容",
+            "controlType": 2,
+            "icon": "icon-duohangwenben",
+            "fieldName": "jobContent",
+            "isSubTableField": true,
+            "allowNull": true,
+            "defaultValue": "",
+            "corProperty": {
+                "text": "",
+                "field": "",
+                "property": ""
+            },
+            "description": "允许最大输入500个汉字或显示日期计算结果",
+            "type": "mtext",
+            "typeName": "多行文本",
+            "style": {
+                "color": "#666",
+                "fontSize": "12px",
+                "fontFamily": "Microsoft YaHei",
+                "backgroundColor": "#fff"
+            },
+            "isUsed": false
+        }, {
+            "id": 20,
+            "tableId": 1002,
+            "title": "不让该企业看我",
+            "controlType": 5,
+            "icon": "icon-fuxuankuang",
+            "fieldName": "canWatch",
+            "isSubTableField": true,
+            "options": [{
+                "value": 0,
+                "text": "查看"
+            }],
+            "description": "",
+            "isUsed": false,
+            "type": "checkbox",
+            "typeName": "复选框",
+            "style": {
+                "color": "#666",
+                "fontSize": "12px",
+                "fontFamily": "Microsoft YaHei",
+                "backgroundColor": "#fff"
+            }
+        }, {
+            "id": 29,
+            "tableId": 1002,
+            "title": "合同",
+            "controlType": 39,
+            "icon": "icon-hetong",
+            "fieldName": "contract",
+            "isSubTableField": true,
+            "allowNull": true,
+            "defaultValue": "",
+            "corField": "",
+            "description": "CRM合同选择框",
+            "type": "contract-droplist",
+            "typeName": "合同",
+            "properties": [{
+                    "text": "合同编号",
+                    "value": "hetongbianhao"
+                },
+                {
+                    "text": "合同类型",
+                    "value": "hetongleixing"
+                },
+                {
+                    "text": "合同状态",
+                    "value": "hetongzhuangtai"
+                },
+                {
+                    "text": "签订时间",
+                    "value": "qiandingshijian"
+                },
+                {
+                    "text": "失效日期",
+                    "value": "shixiaoriqi"
+                },
+                {
+                    "text": "签订人",
+                    "value": "qiandingren"
+                }
+            ],
+            "style": {
+                "color": "#666",
+                "fontSize": "12px",
+                "fontFamily": "Microsoft YaHei",
+                "backgroundColor": "#fff"
+            },
+            "isUsed": false
+        }, {
+            "id": 31,
+            "tableId": 1002,
+            "title": "合同金额",
+            "controlType": 7,
+            "icon": "icon-shuzi",
+            "fieldName": "contractMoney",
+            "isSubTableField": true,
+            "allowNull": true,
+            "defaultValue": "",
+            "corProperty": {
+                "text": "",
+                "field": "",
+                "property": ""
+            },
+            "formula": [],
+            "dx": false,
+            "calcTotal": false,
+            "totalDx": false,
+            "showFormat": "",
+            "description": "数字录入框",
+            "type": "numberbox",
+            "typeName": "数字框",
+            "style": {
+                "color": "#666",
+                "fontSize": "12px",
+                "fontFamily": "Microsoft YaHei",
+                "backgroundColor": "#fff"
+            },
+            "isUsed": false
+        }, {
+            "id": 32,
+            "tableId": 1002,
+            "title": "数量",
+            "controlType": 7,
+            "icon": "icon-shuzi",
+            "fieldName": "qty",
+            "isSubTableField": true,
+            "allowNull": true,
+            "defaultValue": "",
+            "corProperty": {
+                "text": "",
+                "field": "",
+                "property": ""
+            },
+            "formula": [],
+            "dx": false,
+            "calcTotal": false,
+            "totalDx": false,
+            "showFormat": "",
+            "description": "数字录入框",
+            "type": "numberbox",
+            "typeName": "数字框",
+            "style": {
+                "color": "#666",
+                "fontSize": "12px",
+                "fontFamily": "Microsoft YaHei",
+                "backgroundColor": "#fff"
+            },
+            "isUsed": false
+        }],
+        "type": "table",
+        "typeName": "子表",
+        "style": {
+            "color": "#666",
+            "fontSize": "12px",
+            "fontFamily": "Microsoft YaHei",
+            "backgroundColor": "#fff"
+        },
+        "isUsed": false
+    }, {
+        "id": 1003,
+        "title": "项目经历",
+        "controlType": 106,
+        "icon": "icon-tables-copy",
+        "fields": [{
+            "id": 21,
+            "tableId": 1003,
+            "title": "项目名称",
+            "controlType": 1,
+            "icon": "icon-danhangwenben",
+            "fieldName": "projectName",
+            "isSubTableField": true,
+            "allowNull": true,
+            "defaultValue": "",
+            "corProperty": {
+                "text": "",
+                "field": "",
+                "property": ""
+            },
+            "dateCalc": false,
+            "formula": [],
+            "showYear": false,
+            "showMonth": false,
+            "showDate": false,
+            "description": "允许最大输入200个汉字或显示日期计算结果",
+            "isUsed": false,
+            "type": "stext",
+            "typeName": "单行文本",
+            "style": {
+                "color": "#666",
+                "fontSize": "12px",
+                "fontFamily": "Microsoft YaHei",
+                "backgroundColor": "#fff"
+            }
+        }, {
+            "id": 22,
+            "tableId": 1003,
+            "title": "开始日期",
+            "controlType": 8,
+            "icon": "icon-date",
+            "fieldName": "projectStartDate",
+            "isSubTableField": true,
+            "allowNull": true,
+            "defaultValue": "",
+            "corProperty": {
+                "text": "",
+                "field": "",
+                "property": ""
+            },
+            "containHour": false,
+            "currentTime": false,
+            "description": "日期选择框,如设为当前时间,则只读",
+            "isUsed": false,
+            "type": "datepicker",
+            "typeName": "日期输入框",
+            "style": {
+                "color": "#666",
+                "fontSize": "12px",
+                "fontFamily": "Microsoft YaHei",
+                "backgroundColor": "#fff"
+            }
+        }, {
+            "id": 23,
+            "tableId": 1003,
+            "title": "结束日期",
+            "controlType": 8,
+            "icon": "icon-date",
+            "fieldName": "projectEndDate",
+            "isSubTableField": true,
+            "allowNull": true,
+            "defaultValue": "",
+            "corProperty": {
+                "text": "",
+                "field": "",
+                "property": ""
+            },
+            "containHour": false,
+            "currentTime": false,
+            "description": "日期选择框,如设为当前时间,则只读",
+            "isUsed": false,
+            "type": "datepicker",
+            "typeName": "日期输入框",
+            "style": {
+                "color": "#666",
+                "fontSize": "12px",
+                "fontFamily": "Microsoft YaHei",
+                "backgroundColor": "#fff"
+            }
+        }, {
+            "id": 24,
+            "tableId": 1003,
+            "title": "职位",
+            "controlType": 1,
+            "icon": "icon-danhangwenben",
+            "fieldName": "projectPosition",
+            "isSubTableField": true,
+            "allowNull": true,
+            "defaultValue": "",
+            "corProperty": {
+                "text": "",
+                "field": "",
+                "property": ""
+            },
+            "dateCalc": false,
+            "formula": [],
+            "showYear": false,
+            "showMonth": false,
+            "showDate": false,
+            "description": "允许最大输入200个汉字或显示日期计算结果",
+            "isUsed": false,
+            "type": "stext",
+            "typeName": "单行文本",
+            "style": {
+                "color": "#666",
+                "fontSize": "12px",
+                "fontFamily": "Microsoft YaHei",
+                "backgroundColor": "#fff"
+            }
+        }, {
+            "id": 25,
+            "tableId": 1003,
+            "title": "项目描述",
+            "controlType": 2,
+            "icon": "icon-duohangwenben",
+            "fieldName": "projectDesc",
+            "isSubTableField": true,
+            "allowNull": true,
+            "defaultValue": "",
+            "corProperty": {
+                "text": "",
+                "field": "",
+                "property": ""
+            },
+            "description": "允许最大输入500个汉字或显示日期计算结果",
+            "type": "mtext",
+            "typeName": "多行文本",
+            "style": {
+                "color": "#666",
+                "fontSize": "12px",
+                "fontFamily": "Microsoft YaHei",
+                "backgroundColor": "#fff"
+            },
+            "isUsed": false
+        }, {
+            "id": 33,
+            "tableId": 1003,
+            "title": "天数",
+            "controlType": 7,
+            "icon": "icon-shuzi",
+            "fieldName": "days",
+            "isSubTableField": true,
+            "allowNull": true,
+            "defaultValue": "",
+            "corProperty": {
+                "text": "",
+                "field": "",
+                "property": ""
+            },
+            "formula": [],
+            "dx": false,
+            "calcTotal": false,
+            "totalDx": false,
+            "showFormat": "",
+            "description": "数字录入框",
+            "type": "numberbox",
+            "typeName": "数字框",
+            "style": {
+                "color": "#666",
+                "fontSize": "12px",
+                "fontFamily": "Microsoft YaHei",
+                "backgroundColor": "#fff"
+            },
+            "isUsed": false
+        }],
+        "type": "table",
+        "typeName": "子表",
+        "style": {
+            "color": "#666",
+            "fontSize": "12px",
+            "fontFamily": "Microsoft YaHei",
+            "backgroundColor": "#fff"
+        },
+        "isUsed": false
+    }, {
+        "id": 30,
+        "title": "合同总额",
+        "controlType": 7,
+        "icon": "icon-shuzi",
+        "fieldName": "contractSumMoney",
+        "isSubTableField": false,
+        "allowNull": true,
+        "defaultValue": "",
+        "corProperty": {
+            "text": "",
+            "field": "",
+            "property": ""
+        },
+        "formula": [],
+        "dx": false,
+        "calcTotal": false,
+        "totalDx": false,
+        "showFormat": "",
+        "description": "数字录入框",
+        "type": "numberbox",
+        "typeName": "数字框",
+        "style": {
+            "color": "#666",
+            "fontSize": "12px",
+            "fontFamily": "Microsoft YaHei",
+            "backgroundColor": "#fff"
+        },
+        "isUsed": false
+    }],
+    "fixedFields": [{
+            "title": "图片",
+            "id": 10001,
+            "controlType": 1000,
+            "icon": "icon-tupianxuanze",
+            "type": "image-picker",
+            "typeName": "图片框",
+            "description": "显示指定的图片",
+            "picUrl": "",
+            "isFixed": true,
+            "style": {
+                "color": "#666",
+                "fontSize": "12px",
+                "backgroundColor": "#fff"
+            }
+        },
+        {
+            "title": "链接",
+            "id": 10002,
+            "controlType": 1001,
+            "icon": "icon-lianjie",
+            "type": "link",
+            "typeName": "链接",
+            "isCRMArticle": false,
+            "description": "链接其他信息或CRM内部文章",
+            "href": "",
+            "isFixed": true,
+            "style": {
+                "color": "#666",
+                "fontSize": "12px",
+                "backgroundColor": "#fff"
+            }
+        },
+        {
+            "title": "标签",
+            "id": 10003,
+            "controlType": 1002,
+            "icon": "icon-wenben",
+            "type": "tag",
+            "typeName": "标签",
+            "description": "可以设置显示样式",
+            "isFixed": true,
+            "style": {
+                "color": "#666",
+                "fontSize": "12px",
+                "backgroundColor": "#fff"
+            }
+        },
+        {
+            "title": "大写显示",
+            "id": 10004,
+            "controlType": 1003,
+            "icon": "icon-dx",
+            "type": "dx",
+            "typeName": "大写显示",
+            "corField": "",
+            "description": "将对应字段的值以大写方式显示",
+            "isFixed": true,
+            "style": {
+                "color": "#666",
+                "fontSize": "12px",
+                "backgroundColor": "#fff"
+            }
+        }
+    ]
+}

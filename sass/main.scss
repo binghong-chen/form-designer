@@ -1,0 +1,588 @@
+$phone-screen-width: 320px;
+$phone-screen-height: 568px;
+$phone-border-horizontal-width: 10px;
+$phone-border-vertical-width: 60px;
+$settings-width: 298px;
+$head-height: 55px;
+$toolbar-item-width: $head-height+5px;
+$blue: rgb(62, 151, 235);
+$blue-t:rgba(62, 151, 235, 0.6);
+$gray: #666;
+$grayWhite: #aaa;
+$nearWhite: #eee;
+$phoneColor: rgba(255, 255, 255, 0.6);
+$phoneScreenColor: #ccc;
+$dialog-zIndex: 9;
+$model-panel-shade-zIndex: 8;
+$dragged-zIndex: 7;
+$control-zIndex: 6;
+$floatPanel-zIndex: 5;
+$scroll-bar-zIndex: 4;
+$controlPanel-zIndex: 3;
+$phone-zIndex: 2;
+$phone-border-zIndex: 1;
+$control-border: 1px;
+$control-maring: 8px;
+
+.virtual-dom {
+    position: absolute;
+    height: 100%;
+    margin-top: 0 !important;
+    z-index: 0;
+    display: none;
+
+    .control {
+        position: absolute;
+        background-color: transparent;
+        border: 1px solid $blue !important;
+    }
+}
+
+.draggable {
+    cursor: move !important;
+}
+
+.scroll-outer {
+    overflow: hidden !important;
+}
+
+.scroll-outer>.scroll-inner {
+    width: calc(100% + 20px);
+    overflow-y: scroll;
+    height: 100%;
+}
+
+.scroll-outer>.scroll-bar {
+    position: absolute;
+    width: 5px;
+    background-color: rgba(255, 255, 255, 0.9);
+    z-index: $scroll-bar-zIndex;
+}
+
+.scroll-bar-btn {
+    background-color: $blue-t;
+    width: 100%;
+    height: 20px;
+    cursor: pointer !important;
+}
+
+.float-panel {
+    border: 1px solid #ccc;
+    z-index: $floatPanel-zIndex;
+}
+
+$panel-head: 30px;
+$panel-footer: 40px;
+$select-box-title-height: 30px;
+
+.panel-head {
+    text-align: center;
+    height: $panel-head;
+    line-height: $panel-head;
+}
+
+.panel-content {
+
+    .panel-left,
+    .panel-right {
+        position: absolute;
+        display: inline-block;
+        width: calc(50% - 20px);
+        margin: 0 10px;
+        height: calc(100% - #{$panel-head} - #{$panel-footer});
+    }
+
+    .panel-right {
+        left: 50%;
+    }
+
+    height: calc(100% - #{$panel-head} - #{$panel-footer});
+}
+
+.button-formula {
+    margin: 1px -1px;
+    width: 28px;
+    height: 28px;
+    line-height: 28px;
+    border: none;
+    background-color: lightblue;
+    color: #333;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    cursor: pointer;
+    outline: none;
+}
+
+.select-box {
+    word-wrap: break-word;
+    border: 2px inset #ccc;
+    cursor: pointer;
+
+    .select-item {
+        border: 1px dashed transparent;
+    }
+
+    .select-item:hover {
+        border: 1px dashed $grayWhite;
+    }
+
+    .select-item.selected {
+        border: 1px dashed $blue;
+        background-color: $blue;
+    }
+}
+
+.panel-footer {
+    position: absolute;
+    width: 100%;
+    height: $panel-footer;
+    line-height: $panel-footer;
+    text-align: right;
+
+    button {
+        height: 60%;
+        line-height: 60%;
+        margin-right: 10px;
+    }
+}
+
+.blue {
+    background-color: $blue;
+    border-color: $blue;
+}
+
+.gray {
+    background-color: $gray;
+    border-color: $gray;
+}
+
+#head {
+    height: $head-height;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    font-size: 12px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    background-color: #fff;
+}
+
+.left,
+.right {
+    flex: 1;
+}
+
+.middle {
+    flex: 2;
+}
+
+#buttons {
+    float: right;
+    margin-right: 8px;
+}
+
+.button-m {
+    border: none;
+    color: #fff;
+    padding: 8px 6px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    margin: 0px 2px;
+    cursor: pointer;
+    margin-top: 10px;
+    border-radius: 4px;
+    outline: none;
+}
+
+#work {
+    position: absolute;
+    top: $head-height;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
+body {
+    background: #000 url(../images/5.jpg) center center/100% 100% no-repeat;
+    background-attachment: fixed;
+    background-position: top center;
+    background-size: cover;
+}
+
+$phone-margin-top: 20px;
+
+#phone-border {
+    position: absolute;
+    left: 40%;
+    width: $phone-screen-width;
+    height: $phone-screen-height;
+    background-color: $phoneScreenColor;
+    z-index: $phone-border-zIndex;
+    margin-top: $phone-margin-top;
+    border-left: 10px solid $phoneColor;
+    border-right: 10px solid $phoneColor;
+    border-top: $phone-border-vertical-width solid $phoneColor;
+    border-bottom: $phone-border-vertical-width solid $phoneColor;
+    border-radius: 50px;
+}
+
+$phone-padding-top:$phone-border-vertical-width+$phone-margin-top;
+
+#phone {
+    position: absolute;
+    margin-top: $phone-padding-top;
+    height: $phone-screen-height;
+    width: 100%;
+    background-color: transparent;
+    z-index: $phone-zIndex;
+}
+
+.control.hover {
+    border: 1px dashed $blue;
+}
+
+.control>.control-top-right {
+    visibility: hidden;
+    position: absolute;
+    top: 0;
+    right: 0;
+
+    .iconfont {
+        display: inline-block;
+        margin-left: -3px;
+        background-color: $blue;
+        color: #fff;
+        cursor: pointer;
+    }
+}
+
+.control.hover>.control-top-right {
+    visibility: visible;
+}
+
+.control.selected {
+    border: 1px solid $blue !important;
+}
+
+.control-container.dragged {
+    z-index: $dragged-zIndex;
+
+    .control {
+        border: 1px dashed transparent !important;
+        background-color: rgba(88, 88, 88, 0.8) !important;
+        color: white !important;
+
+        .control-table {
+            display: none;
+        }
+    }
+}
+
+.model-panel-shade {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: $model-panel-shade-zIndex;
+    background-color: #000;
+    opacity: 0.3;
+}
+
+$panel_corPropertyWidth:600px;
+$panel_corPropertyHeight:500px;
+
+#panel_corProperty {
+    position: absolute;
+    top: calc(50% - calc(#{$panel_corPropertyHeight}/2));
+    left:calc(40% - (#{$panel_corPropertyWidth} - #{$phone-screen-width})/ 2);
+    background-color: #fff;
+    width: $panel_corPropertyWidth;
+    height: $panel_corPropertyHeight;
+    z-index: $dialog-zIndex;
+}
+
+$panel_corFieldWidth:400px;
+$panel_corFieldHeight:500px;
+
+#panel_corField {
+    position: absolute;
+    top: calc(50% - calc(#{$panel_corFieldHeight}/2));
+    left:calc(40% - (#{$panel_corFieldWidth} - #{$phone-screen-width})/ 2);
+    background-color: #fff;
+    width: $panel_corFieldWidth;
+    height: $panel_corFieldHeight;
+    z-index: $dialog-zIndex;
+}
+
+$panel_hrefWidth:400px;
+$panel_hrefHeight:140px;
+
+#panel_href {
+    position: absolute;
+    top: calc(50% - calc(#{$panel_hrefHeight}/2));
+    left:calc(40% - (#{$panel_hrefWidth} - #{$phone-screen-width})/ 2);
+    background-color: #fff;
+    width: $panel_hrefWidth;
+    height: $panel_hrefHeight;
+    z-index: $dialog-zIndex;
+}
+
+$panel_formulaWidth:660px;
+$panel_formulaHeight:500px;
+
+#panel_date_formula,
+#panel_number_formula {
+    position: absolute;
+    top: calc(50% - calc(#{$panel_formulaHeight}/2));
+    left:calc(40% - (#{$panel_formulaWidth} - #{$phone-screen-width})/ 2);
+    background-color: #fff;
+    width: $panel_formulaWidth;
+    height: $panel_formulaHeight;
+    z-index: $dialog-zIndex;
+}
+
+.select {
+    border: 1px solid $grayWhite;
+    border-radius: 3px;
+    width: 100%;
+    height: 26px;
+    line-height: 26px;
+    padding: 3px 2px;
+    outline: none;
+    box-sizing: border-box;
+}
+
+#settings {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: $settings-width;
+    z-index: $floatPanel-zIndex;
+    background-color: #fff;
+    color: #333;
+
+    #settings_content {
+        margin: 15px 5px;
+
+        .setting-item {
+            margin-left: 5px;
+            margin-top: 10px;
+            font-size: 0.8rem;
+            color: $gray;
+        }
+
+        .setting-title {
+            border-left: 3px solid $blue;
+            padding-left: 5px;
+            font-size: 0.8rem;
+            margin-top: 3px;
+        }
+
+        .setting-value {
+            margin-top: 3px;
+            line-height: 20px;
+            padding: 3px 0;
+        }
+
+        .setting-checkbox-item {
+            display: inline-block;
+        }
+
+        input[type=text],
+        select {
+            border: 1px solid $grayWhite;
+            border-radius: 3px;
+            width: calc(100% - 10px);
+            height: 26px;
+            line-height: 26px;
+            padding: 3px 2px;
+            outline: none;
+            box-sizing: border-box;
+        }
+
+        input.choose-button-input {
+            width: calc(100% - 55px);
+        }
+
+        button.choose-button {
+            width: 40px;
+            margin-left: 2px;
+        }
+
+        input[type=text]:focus {
+            border: 1px solid $blue;
+        }
+    }
+}
+
+#toolbar {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    height: 100%;
+}
+
+.toolbar-item {
+    color: #333;
+    width: $toolbar-item-width;
+    height: $head-height;
+    text-align: center;
+    cursor: pointer;
+}
+
+.toolbar-item:hover {
+    background-color: $blue;
+    color: #fff;
+}
+
+.toolbar-name {
+    margin-top: 5px;
+}
+
+$panel-controls-width: 390px;
+
+#panel-controls {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: $panel-controls-width;
+    margin-top: 10px;
+    height: calc(100% - 40px);
+    font-size: 12px;
+    color: $nearWhite;
+    visibility: hidden;
+    z-index: $controlPanel-zIndex;
+
+    .panel-controls-title {
+        margin-left: 5px;
+        font-size: 14px;
+        margin-bottom: 5px;
+    }
+
+    #panel-onetime-controls,
+    #panel-fixed-controls {
+        width: 100%;
+    }
+
+    #panel-onetime-controls {
+        position: relative;
+        height: 60%;
+
+        .panel-table-controls {
+            margin-top: 20px;
+            position: relative;
+        }
+
+        .panel-controls-content {
+            height: 100%;
+            width: 100%;
+        }
+    }
+
+    #panel-fixed-controls {
+        margin-top: 10%;
+        height: 30%;
+    }
+}
+
+.control-item {
+    display: inline-block;
+    width: 100px;
+    height: 25px;
+    line-height: 25px;
+    border: 1px dashed $nearWhite;
+    margin: 5px;
+    padding: 5px;
+    text-align: center;
+    cursor: move;
+
+    .control-name {
+        display: inline-block;
+        width: 80px;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        -o-text-overflow: ellipsis;
+        overflow: hidden;
+        vertical-align: middle;
+    }
+
+    .control-icon {
+        vertical-align: middle;
+        display: inline-block;
+        left: 80px;
+        width: 15px;
+    }
+}
+
+.control-item:hover {
+    background-color: rgba(220, 220, 220, 0.2);
+}
+
+.toolbar-icon {
+    padding-top: 5px;
+}
+
+.disabled {
+    cursor: not-allowed;
+}
+
+#contextmenu {
+    cursor: pointer;
+}
+
+.contextmenu-item {
+    padding: 2px;
+}
+
+.resize-bar {
+    background-color: red;
+    position: absolute;
+}
+
+$bar-width: 4px;
+$bar-position: -$bar-width/2;
+
+.resize-top {
+    width: 100%;
+    height: $bar-width;
+    top: $bar-position;
+    left: 0;
+    cursor: ns-resize!important;
+}
+
+.resize-bottom {
+    width: 100%;
+    height: $bar-width;
+    bottom: $bar-position;
+    left: 0;
+    cursor: ns-resize!important;
+}
+
+.resize-left {
+    height: 100%;
+    width: $bar-width;
+    top: 0;
+    left: $bar-position;
+    cursor: ew-resize!important;
+}
+
+.resize-right {
+    height: 100%;
+    width: $bar-width;
+    top: 0;
+    right: $bar-position;
+    cursor: ew-resize!important;
+}
+
+.resize-corner {
+    height: 8px;
+    width: 8px;
+    bottom: 0;
+    right: 0;
+    cursor: nwse-resize!important;
+}

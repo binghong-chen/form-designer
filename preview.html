@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="css/phone.1.css" type="text/css">
+    <link rel="stylesheet" href="assets/font/iconfont.css" type="text/css">
+</head>
+
+<body>
+    <script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+    <div id="container">
+    </div>
+    <script type="text/javascript">
+        $(function () {
+            if (window.opener) {
+                document.querySelector('#container').appendChild(window.opener.getPhoneCloneNode());
+            }
+
+            $('.fold').remove();
+
+            $('.contextmenu').remove();
+
+            $('#phone input[type=text],textarea, select').removeAttr('readonly');
+            $('#phone input[type=radio], #phone input[type=checkbox]').removeAttr('disabled');
+
+            $('#phone .control.image-selector input[type=file]').change(function () {
+                var $dom = $(this);
+                var file = this.files[0];
+                var reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = function (e) {
+                    $('<img src="' + this.result + '" />').insertAfter($dom);
+                };
+            });
+
+            $('#phone .control .image-selector-icon').click(function (evt) {
+                $(this).next('input[type=file]').click();
+            });
+        });
+    </script>
+</body>
+
+</html>

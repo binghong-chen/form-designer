@@ -1,0 +1,58 @@
+$phone-screen-width: 320px;
+$control-maring: 8px;
+$control-padding: 8px;
+$control-border: 1px;
+$control-zIndex: 6;
+
+.control-container {
+    width: $phone-screen-width - 2*$control-maring - 2*$control-border;
+    margin-left: $control-maring;
+    margin-top: $control-maring;
+}
+
+.control[type=table] {
+    .control-container {
+        width: 100%;
+        margin-left: 0;
+        margin-top: $control-maring;
+    }
+}
+
+.control {
+    position: relative;
+    display: inline-block;
+    border: $control-border solid #ccc;
+    background-color: #fff;
+    width: calc(100% - 2*#{$control-border});
+    height: calc(100% - 2*#{$control-border});
+    z-index: $control-zIndex;
+
+    .stext,
+    .ltext,
+    .mtext,
+    .numberbox,
+    .droplist,
+    .datepicker {
+        box-sizing: border-box;
+        width: calc(100% - 2*#{$control-padding});
+        border: 1px solid #bbb;
+        border-radius: 3px;
+        padding: 5px 2px;
+        outline: none;
+    }
+}
+
+.control-title,
+.control-element {
+    padding: $control-padding;
+}
+
+.image-selector img {
+    width: 25%;
+    height: auto;
+}
+
+img.image-picker {
+    width: 100%;
+    height: auto;
+}

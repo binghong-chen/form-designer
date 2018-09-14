@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>表单设计器</title>
+    <link rel="stylesheet" href="css/magic-check.css" type="text/css">
+    <link rel="stylesheet" href="css/main.css" type="text/css">
+    <link rel="stylesheet" href="css/phone.css" type="text/css">
+    <link rel="stylesheet" href="assets/font/iconfont.css" type="text/css">
+</head>
+
+<body>
+    <script type="text/html" id="control-element-template">
+        <div :id="'control-' + field.id " :class="controlClass(field)" @mouseenter="hover($event, field)" @mouseleave="unHover($event, field)" @click.stop="controlClick($event,field)" :type="field.type" :title="title(field)" v-bind:style="field.style">
+            <div class="control-top-right">
+                <i v-if="field.type=='table'" @click.stop="controlToggle(field)" :class="['iconfont', field.isUnFold ? 'icon-zhankai' : 'icon-shouqi_m']"></i>
+                <i @click.stop="controlDelete(field)" :class="['iconfont', 'icon-guanbi1']"></i>
+            </div>
+            <div class="control-title draggable">{{field.title}}
+                <span v-show="field.type !='table' && field.allowNull === false" style="margin-left: 4px; color:red; font-size: 12px;">*</span>
+            </div>
+            <div class="control-element">
+                <img v-if="field.type=='image-picker'" :class="field.type" :src="field.picUrl || 'images/1.png'" alt="" @load="checkScroll" />
+                <span v-if="field.type=='tag'" :class="field.type"></span>
+                <a v-if="field.type=='link'" :class="field.type" :href="field.href" target="_blank">{{field.title}}</a>
+                <div v-if="field.type=='dx'" :class="field.type"></div>
+                <input v-if="field.type=='stext'" type="text" :class="field.type" v-model="field.defaultValue" readonly="true" />
+                <input v-if="field.type=='ltext'" type="text" :class="field.type" v-model="field.defaultValue" readonly="true" />
+                <input v-if="field.type=='numberbox'" type="text" :class="field.type" v-model="field.defaultValue" readonly="true" />
+                <div v-if="field.type=='radio'" :class="field.type">
+                    <div v-for="option in field.options">
+                        <input :id="field.fieldName + '-' + option.value" v-model="option.value" :name="field.fieldName" type="radio" disabled="disabled"
+                        />
+                        <label :for="field.fieldName + '-' + option.value">{{option.text}}</label>
+                    </div>
+                </div>
+                <div v-if="field.type=='checkbox'" :class="field.type">
+                    <div v-for="option in field.options">
+                        <input :id="field.fieldName + '-' + option.value" v-model="field.options" type="checkbox" disabled="disabled" />
+                        <label :for="field.fieldName + '-' + option.value">{{option.text}}</label>
+                    </div>
+                </div>
+                <textarea v-if="field.type=='mtext'" :class="field.type" v-model="field.defaultValue" readonly="true"></textarea>
+                <select v-if="field.type=='droplist'" :class="field.type" readonly="true">
+                    <option v-for="option in field.options" :value="option.value">
+                        {{option.text}}
+                    </option>
+                </select>
+                <div v-if="field.type=='datepicker'">
+                    <input type="text" class="datepicker" :disabled="field.currentTime" :value="value(field)" readonly="true" />
+                </div>
+                <div v-if="field.type=='image-selector'">
+                    <i class="iconfont image-selector-icon icon-tianjia1-copy" style="font-size: 40px;"></i>
+                    <input type="file" accept="image/*" style="display:none;" />
+                </div>
+                <div v-if="field.type=='table'">
+                    <div v-show="!field.isUnFold" :id="'control-table-' + field.id" class="control-table">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </script>
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/scrollable.js"></script>
+    <script type="text/javascript" src="js/common.js"></script>
+    <script type="text/javascript" src="js/vue.js"></script>
+    <script type="text/javascript" src="js/resizable.js"></script>
+    <script type="text/javascript" src="js/draggable.js"></script>
+    <script type="text/javascript" src="js/sortable.js"></script>
+    <script type="text/javascript" src="js/color-picker.js"></script>
+    <div id="container">
+        <div class="model-panel-shade" style="display:none;">
+        </div>
+        <div id="panel_corField" class="float-panel draggable-body" style="display:none;">
+            <div v-show="type === 'dx'" class="panel-head draggable">选择要大写显示的字段</div>
+            <div v-show="type !== 'dx'" class="panel-head draggable">关联字段选择</div>
+            <div class="panel-content">
+                <div class="select-box" style="height: 100%;">
+                    <div class="select-item" :class="{selected: selectedField === corField}" v-for="corField in corFields"
+                        @click="selectField(corField)">
+                        {{corField.title}}
+                    </div>
+                </div>
+            </div>
+            <div class="panel-footer">
+                <button id="btn_corField_OK" @click="ok">确定</button>
+                <button id="btn_corField_Cancel" @click="cancel">取消</button>
+            </div>
+        </div>
+        <div id="panel_corProperty" class="float-panel draggable-body" style="display:none;">
+            <div class="panel-head draggable">属性选择</div>
+            <div class="panel-content">
+                <div class="panel-left">
+                    <div style="height: 30px; line-height: 30px;">1.先选择关联字段</div>
+                    <div class="select-box" style="height: calc(100% - 30px);">
+                        <div class="select-item" :class="{selected: selectedField === corField}" v-for="corField in corFields"
+                            @click="showProperties(corField)">
+                            {{corField.title}}
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-right">
+                    <div style="height: 30px; line-height: 30px;">2.再选择属性</div>
+                    <div class="select-box" style="height: calc(100% - 30px);">
+                        <div v-if="selectedField !== undefined">
+                            <div class="select-item" :class="{selected: selectedProperty === property}" v-for="property in selectedField.properties"
+                                @click="selectProperty(property)">
+                                {{property.text}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="panel-footer">
+                <button id="btn_corProperty_OK" @click="ok">确定</button>
+                <button id="btn_corProperty_Cancel" @click="cancel">取消</button>
+            </div>
+        </div>
+        <div id="panel_date_formula" class="float-panel draggable-body" style="display:none;">
+            <div class="panel-head draggable">日期计算公式设置</div>
+            <div class="panel-content">
+                <div class="panel-center" style="height: calc(100%-40px);">
+                    <div class="panel-left">
+                        <div class="panel-button-formula">
+                            <button class="button-formula" @click="addOperator('+')">+</button>
+                            <button class="button-formula" @click="addOperator('-')">-</button>
+                            <button class="button-formula" @click="formula.pop()">←</button>
+                            <button class="button-formula" @click="formula = []">C</button>
+                        </div>
+                        <div style="height: 20px; line-height: 20px;">字段</div>
+                        <div class="select-box" style="height: calc(100% - 50px);">
+                            <div class="select-item" :class="{selected: selectedField === field}" v-for="field in fields"
+                                @click="selectField(field)">
+                                {{field.title}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel-right">
+                        <div style="height: 20px; line-height: 20px; margin-top: 30px;">公式</div>
+                        <div class="select-box" style="height: calc(100% - 50px);">
+                            {{formula.join('')}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="panel-footer">
+                <button id="btn_corProperty_OK" @click="ok">确定</button>
+                <button id="btn_corProperty_Cancel" @click="cancel">取消</button>
+            </div>
+        </div>
+        <div id="panel_number_formula" class="float-panel draggable-body" style="display:none;">
+            <div class="panel-head draggable">计算公式设置</div>
+            <div class="panel-content">
+                <div class="panel-center" style="height: calc(100%-40px);">
+                    <div class="panel-left">
+                        <div class="panel-button-formula">
+                            <button class="button-formula" @click="addOperator('+')">+</button>
+                            <button class="button-formula" @click="addOperator('-')">-</button>
+                            <button class="button-formula" @click="addOperator('*')">*</button>
+                            <button class="button-formula" @click="addOperator('/')">/</button>
+                            <button class="button-formula" @click="addOperator('(')">(</button>
+                            <button class="button-formula" @click="addOperator(')')">)</button>
+                            <button class="button-formula" @click="addOperator('.')">.</button>
+                            <button class="button-formula" @click="formula.pop()">←</button>
+                            <button class="button-formula" @click="formula = []">C</button>
+                        </div>
+                        <div class="panel-button-formula">
+                            <button class="button-formula" @click="addOperator('0')">0</button>
+                            <button class="button-formula" @click="addOperator('1')">1</button>
+                            <button class="button-formula" @click="addOperator('2')">2</button>
+                            <button class="button-formula" @click="addOperator('3')">3</button>
+                            <button class="button-formula" @click="addOperator('4')">4</button>
+                            <button class="button-formula" @click="addOperator('5')">5</button>
+                            <button class="button-formula" @click="addOperator('6')">6</button>
+                            <button class="button-formula" @click="addOperator('7')">7</button>
+                            <button class="button-formula" @click="addOperator('8')">8</button>
+                            <button class="button-formula" @click="addOperator('9')">9</button>
+                        </div>
+                        <div style="height: 20px; line-height: 20px;">字段</div>
+                        <div class="select-box" style="height: calc(100% - 80px);">
+                            <div class="select-item" :class="{selected: selectedField === field}" v-for="field in fields"
+                                @click="selectField(field)">
+                                {{field.title}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel-right">
+                        <div style="height: 20px; line-height: 20px; margin-top: 60px;">公式</div>
+                        <div class="select-box" style="height: calc(100% - 80px);">
+                            {{formula.join('')}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="panel-footer">
+                <button id="btn_corProperty_OK" @click="ok">确定</button>
+                <button id="btn_corProperty_Cancel" @click="cancel">取消</button>
+            </div>
+        </div>
+        <div id="panel_href" class="float-panel draggable-body" style="display:none;">
+            <div class="panel-head draggable">输入{{description}}</div>
+            <div class="panel-content">
+                <div style="padding: 10px;">
+                    输入{{description}}
+                    <input type="text" v-model="href" style="width:calc(100% - 5px);">
+                </div>
+
+            </div>
+            <div class="panel-footer">
+                <button id="btn_href_OK" @click="ok">确定</button>
+                <button id="btn_href_Cancel" @click="cancel">取消</button>
+            </div>
+        </div>
+        <div id="head">
+            <div class="left">
+            </div>
+            <div class="middle">
+                <div id="toolbar">
+                    <div id="toolbar-fontColor">
+                        <div class="toolbar-item">
+                            <div class="toolbar-icon">
+                                <i class="iconfont icon-zitiyanse"></i>
+                            </div>
+                            <div class="toolbar-name">
+                                字体颜色
+                            </div>
+                        </div>
+                    </div>
+                    <div id="toolbar-bgColor">
+                        <div class="toolbar-item">
+                            <div class="toolbar-icon">
+                                <i class="iconfont icon-beijingyanse"></i>
+                            </div>
+                            <div class="toolbar-name">
+                                背景色
+                            </div>
+                        </div>
+                    </div>
+                    <div id="toolbar-font" style="width: 180px; position: relative;">
+                        <select id="toolbar-fontFamilyPicker" class="select" style="position: absolute; width: 100px; top: 15px; left: 10px;">
+                            <option value="Agency FB" style="font-family: Agency FB;">Agency FB</option>
+                            <option value="Apple Chancery" style="font-family: Apple Chancery;">Apple Chancery</option>
+                            <option value="Arial" style="font-family: Arial;">Arial</option>
+                            <option value="Arial Black" style="font-family: Arial Black;">Arial Black</option>
+                            <option value="Arial Narrow" style="font-family: Arial Narrow;">Arial Narrow</option>
+                            <option value="Bookman" style="font-family: Bookman;">Bookman</option>
+                            <option value="Calibri" style="font-family: Calibri;">Calibri</option>
+                            <option value="Comic Sans MS" style="font-family: Comic Sans MS;">Comic Sans MS</option>
+                            <option value="Consolas" style="font-family: Consolas;">Consolas</option>
+                            <option value="Courier" style="font-family: Courier;">Courier</option>
+                            <option value="Courier New" style="font-family: Courier New;">Courier New</option>
+                            <option value="Garamond" style="font-family: Garamond;">Garamond</option>
+                            <option value="Geneva" style="font-family: Geneva;">Geneva</option>
+                            <option value="Georgia" style="font-family: Georgia;">Georgia</option>
+                            <option value="Palatino" style="font-family: Palatino;">Palatino</option>
+                            <option value="Times" style="font-family: Times;">Times</option>
+                            <option value="Times New Roman" style="font-family: Times New Roman;">Times New Roman</option>
+                            <option value="Trebuchet MS" style="font-family: Trebuchet MS;">Trebuchet MS</option>
+                            <option value="Verdana" style="font-family: Verdana;">Verdana</option>
+                            <option value="Impact" style="font-family: Impact;">Impact</option>
+                            <option value="Dengxian" style="font-family: Dengxian;">等线</option>
+                            <option value="Dengxian Light" style="font-family: Dengxian Light;">等线 Light</option>
+                            <option value="FZShuTi" style="font-family: FZShuTi;">方正舒体</option>
+                            <option value="FZYaoti" style="font-family: FZYaoti;">方正姚体</option>
+                            <option value="SimHei" style="font-family: SimHei;">黑体</option>
+                            <option value="FangSong" style="font-family: FangSong;">仿宋</option>
+                            <option value="STCaiyun" style="font-family: STCaiyun;">华文彩云</option>
+                            <option value="STFangsong" style="font-family: STFangsong;">华文仿宋</option>
+                            <option value="STXingkai" style="font-family: STXingkai;">华文行楷</option>
+                            <option value="STHupo" style="font-family: STHupo;">华文琥珀</option>
+                            <option value="STLiti" style="font-family: STLiti;">华文隶书</option>
+                            <option value="STKaiti" style="font-family: STKaiti;">华文楷体</option>
+                            <option value="STSong" style="font-family: STSong;">华文宋体</option>
+                            <option value="STXihei" style="font-family: STXihei;">华文细黑</option>
+                            <option value="STXinwei" style="font-family: STXinwei;">华文新魏</option>
+                            <option value="STZhongsong" style="font-family: STZhongsong;">华文中宋</option>
+                            <option value="KaiTi" style="font-family: KaiTi;">楷体</option>
+                            <option value="LiSu" style="font-family: LiSu;">隶书</option>
+                            <option value="SimSun" style="font-family: SimSun;">宋体</option>
+                            <option value="Microsoft Yahei" style="font-family: Microsoft Yahei;">微软雅黑</option>
+                            <option value="Microsoft Yahei Light" style="font-family: Microsoft Yahei Light;">微软正黑体
+                                Light</option>
+                            <option value="NSimSun" style="font-family: NSimSun;">新宋体</option>
+                            <option value="YouYuan" style="font-family: YouYuan;">幼圆</option>
+                        </select>
+                        <select id="toolbar-fontSizePicker" class="select" style="position: absolute; width: 50px; top: 15px; left: 115px;">
+                            <option value="9" style="font-size: 9px;">9</option>
+                            <option value="10" style="font-size: 10px;">10</option>
+                            <option value="11" style="font-size: 11px;">11</option>
+                            <option value="12" style="font-size: 12px;">12</option>
+                            <option value="13" style="font-size: 13px;">13</option>
+                            <option value="14" style="font-size: 14px;">14</option>
+                            <option value="15" style="font-size: 15px;">15</option>
+                            <option value="16" style="font-size: 16px;">16</option>
+                            <option value="18" style="font-size: 18px;">18</option>
+                            <option value="20" style="font-size: 20px;">20</option>
+                            <option value="24" style="font-size: 24px;">24</option>
+                            <option value="32" style="font-size: 32px;">32</option>
+                            <option value="36" style="font-size: 36px;">36</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="right">
+                <div id="buttons">
+                    <button id="btnPreview" class="button-m blue">预览</button>
+                    <button id="btnSave" class="button-m blue">保存</button>
+                    <button id="btnExit" class="button-m gray">退出</button>
+                </div>
+            </div>
+        </div>
+        <div id="work">
+            <div id="panel-controls">
+                <div id="panel-onetime-controls" class="scroll" scroll-style="zIndex: 2">
+                    <div class="panel-table-controls" v-for="table in tables">
+                        <div class="panel-controls-title">{{table.title}}</div>
+                        <div class="panel-controls-content">
+                            <div :id="'toolbar-control-item-' + field.id" class="control-item" v-for="field in unUsedFields(table)"
+                                @mousedown="mousedown($event,field)">
+                                <div class="control-name">
+                                    {{field.title}}
+                                </div>
+                                <div class="control-icon">
+                                    <i :class="['icon', 'iconfont', field.icon]"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="panel-fixed-controls" class="scroll" scroll-style="zIndex: 2">
+                    <div class="panel-controls-title">固定控件</div>
+                    <div class="panel-controls-content">
+                        <div :id="'toolbar-control-item-' + field.id" class="control-item" v-for="field in fixedFields"
+                            @mousedown="mousedown($event,field)">
+                            <div class="control-name">
+                                {{field.title}}
+                            </div>
+                            <div class="control-icon">
+                                <i :class="['icon', 'iconfont', field.icon]"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <input id="toolbar-imagePicker-input" type="file" accept="image/*" style="display: none;">
+            <div id="phone-border"></div>
+            <div id="phone">
+                <script type="text/javascript" src="js/phone.js"></script>
+            </div>
+            <div id="settings" v-show="field !== undefined" class="float-panel" style="display: none;">
+                <div class="panel-head">属性</div>
+                <div v-if="field !== undefined" id="settings_content">
+                    <div v-show="field.title !== undefined" class="setting-item">
+                        <div class="setting-title">标题</div>
+                        <div class="setting-value">
+                            <input type="text" v-model="field.title" />
+                        </div>
+                    </div>
+                    <div v-show="field.typeName !== undefined" class="setting-item">
+                        <div class="setting-title">类型</div>
+                        <div class="setting-value">
+                            <div>{{field.typeName}}</div>
+                        </div>
+                    </div>
+                    <div v-show="field.fieldName !== undefined" class="setting-item">
+                        <div class="setting-title">字段名</div>
+                        <div class="setting-value">
+                            <div>{{field.fieldName}}</div>
+                        </div>
+                    </div>
+                    <div v-show="field.isSubTableField !== undefined" class="setting-item">
+                        <div class="setting-title">
+                            子表字段
+                        </div>
+                        <div class="setting-value">
+                            <input id="chkSubTableField" type="checkbox" v-model="field.isSubTableField" disabled="disabled"
+                                class="magic-checkbox" />
+                            <label for="chkSubTableField">
+                                子表字段</label>
+                        </div>
+                    </div>
+                    <div v-show="field.picUrl !== undefined" class="setting-item">
+                        <div class="setting-title">图片</div>
+                        <div class="setting-value">
+                            <button class="button-m blue" @click="pickImage()">上传图片</button>
+                            <input id="imagePicker" @change="setImageSrc(field, $event)" type="file" accept="image/*"
+                                style="display:none;" />
+                        </div>
+                    </div>
+                    <div v-show="field.href !== undefined" class="setting-item">
+                        <div class="setting-title">链接地址</div>
+                        <div class="setting-value">
+                            <input class="choose-button-input" type="text" v-model="field.href" readonly="readonly" />
+                            <button class="choose-button" @click="showHref(field)">...</button>
+                        </div>
+                    </div>
+                    <div v-show="field.isCRMArticle !== undefined" class="setting-item">
+                        <div class="setting-title">
+                            CRM文章
+                        </div>
+                        <div class="setting-value">
+                            <input id="chkIsCRMArticle" type="checkbox" v-model="field.isCRMArticle" class="magic-checkbox" />
+                            <label for="chkIsCRMArticle">
+                                CRM文章</label>
+                        </div>
+                    </div>
+                    <div v-show="field.options !== undefined" class="setting-item">
+                        <div class="setting-title">
+                            选项
+                        </div>
+                        <div class="setting-value">
+                            <select>
+                                <option v-for="option in field.options" :value="option.value">
+                                    {{option.text}}
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                    <div v-show="field.allowNull !== undefined" class="setting-item">
+                        <div class="setting-title">
+                            允许为空
+                        </div>
+                        <div class="setting-value">
+                            <input id="chkAllowNull" type="checkbox" v-model="field.allowNull" class="magic-checkbox" />
+                            <label for="chkAllowNull">
+                                允许为空</label>
+                        </div>
+                    </div>
+                    <div v-show="field.defaultValue !== undefined" class="setting-item">
+                        <div class="setting-title">默认值</div>
+                        <div class="setting-value">
+                            <input v-if="field.controlType === 8 && field.containHour" type="datetime-local" v-model="field.defaultValue" />
+                            <input v-if="field.controlType === 8 && !field.containHour" type="date" v-model="field.defaultValue" />
+                            <input v-if="field.controlType !== 8" type="text" v-model="field.defaultValue" />
+                        </div>
+                    </div>
+                    <div v-show="field.corField !== undefined" class="setting-item">
+                        <div class="setting-title">{{field.type === 'tag' ? '对应字段' : '关联字段'}}</div>
+                        <div class="setting-value">
+                            <input class="choose-button-input" type="text" v-model="field.corField" readonly="readonly" />
+                            <button class="choose-button" @click="showCorField(field)">...</button>
+                        </div>
+                    </div>
+                    <div v-show="field.corProperty !== undefined" class="setting-item">
+                        <div class="setting-title">对应属性</div>
+                        <div class="setting-value">
+                            <input v-if="field.corProperty !== undefined" class="choose-button-input" type="text"
+                                v-model="field.corProperty.text" readonly="readonly" />
+                            <button v-if="field.corProperty !== undefined" class="choose-button" @click="showCorProperty(field)">...</button>
+                        </div>
+                    </div>
+                    <div v-show="field.precision !== undefined" class="setting-item">
+                        <div class="setting-title">小数位数</div>
+                        <div class="setting-value">
+                            <input type="number" v-model="field.precision" min="0" max="4" />
+                        </div>
+                    </div>
+                    <div v-show="field.containHour !== undefined" class="setting-item">
+                        <div class="setting-title">包含时刻</div>
+                        <div class="setting-value">
+                            <input id="chkContainHour" type="checkbox" v-model="field.containHour" class="magic-checkbox" />
+                            <label for="chkContainHour">
+                                包含时刻</label>
+                        </div>
+                    </div>
+                    <div v-show="field.currentTime !== undefined" class="setting-item">
+                        <div class="setting-title">当前时间</div>
+                        <div class="setting-value">
+                            <input id="chkCurrentTime" type="checkbox" v-model="field.currentTime" class="magic-checkbox" />
+                            <label for="chkCurrentTime">
+                                当前时间</label>
+                        </div>
+                    </div>
+                    <div v-show="field.dateCalc !== undefined" class="setting-item">
+                        <div class="setting-title">日期计算</div>
+                        <div class="setting-value">
+                            <input id="chkDateCalc" type="checkbox" v-model="field.dateCalc" class="magic-checkbox" />
+                            <label for="chkDateCalc">
+                                日期计算</label>
+                        </div>
+                    </div>
+                    <div v-show="field.formula !== undefined" class="setting-item">
+                        <div class="setting-title"> {{ field.controlType === 8 ? '计算公式' : '设置公式' }} </div>
+                        <div class="setting-value">
+                            <input v-if="field.formula !== undefined" class="choose-button-input" type="text" :value="field.formula.join('')"
+                                readonly="readonly" />
+                            <button v-if="field.formula !== undefined" class="choose-button" @click="showFormula(field)">...</button>
+                        </div>
+                    </div>
+                    <div v-show="field.showYear !== undefined || field.showMonth !== undefined || field.showDate !== undefined"
+                        class="setting-item">
+                        <div class="setting-title">日期显示设置</div>
+                        <div class="setting-value">
+                            <div class="setting-checkbox-item" v-show="field.showYear !== undefined">
+                                <input id="chkShowYear" type="checkbox" v-model="field.showYear" class="magic-checkbox" />
+                                <label for="chkShowYear">
+                                    显示年</label>
+                            </div>
+                            <div class="setting-checkbox-item" v-show="field.showMonth !== undefined">
+                                <input id="chkShowMonth" type="checkbox" v-model="field.showMonth" class="magic-checkbox" />
+                                <label for="chkShowMonth">
+                                    显示月</label>
+                            </div>
+                            <div class="setting-checkbox-item" v-show="field.showDate !== undefined">
+                                <input id="chkShowDate" type="checkbox" v-model="field.showDate" class="magic-checkbox" />
+                                <label for="chkShowDate">
+                                    显示天</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div v-show="field.dx !== undefined || field.calcTotal !== undefined || field.totalDx !== undefined"
+                        class="setting-item">
+                        <div class="setting-title">数字显示设置</div>
+                        <div class="setting-value">
+                            <div class="setting-checkbox-item" v-show="field.dx !== undefined">
+                                <input id="chkDx" type="checkbox" v-model="field.dx" class="magic-checkbox" />
+                                <label for="chkDx">
+                                    大写</label>
+                            </div>
+                            <div class="setting-checkbox-item" v-show="field.calcTotal !== undefined">
+                                <input id="chkCalcTotal" type="checkbox" v-model="field.calcTotal" class="magic-checkbox" />
+                                <label for="chkCalcTotal">
+                                    计算合计</label>
+                            </div>
+                            <div class="setting-checkbox-item" v-show="field.totalDx !== undefined">
+                                <input id="chkTotalDx" type="checkbox" v-model="field.totalDx" class="magic-checkbox" />
+                                <label for="chkTotalDx">
+                                    合计大写</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div v-show="field.showFormat !== undefined" class="setting-item">
+                        <div class="setting-title">
+                            显示格式
+                        </div>
+                        <div class="setting-value">
+                            <select v-model="field.showFormat">
+                                <option value="0">无</option>
+                                <option value="1">不显示小数点后零</option>
+                                <option value="2">财务格式</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div v-show="field.description !== undefined" class="setting-item">
+                        <div class="setting-title">描述</div>
+                        <div class="setting-value">
+                            <div>{{field.description}}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript" src="js/control.js"></script>
+    <script type="text/javascript" src="js/main.js"></script>
+</body>
+
+</html>
